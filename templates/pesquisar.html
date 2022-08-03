@@ -1,0 +1,47 @@
+{% extends 'layout.html' %} 
+
+{% block content %} 
+
+{% include 'navbar.html' %} 
+
+<div class="container">
+  <div class="row">
+  
+
+        {% for produto in produtos %}
+        <div class="col-md-3">
+            <div class="card">
+                <img src="{{url_for('static', filename='images/' + produto.image_1)}}" alt="{{produto.name}}" class="card-img-top mt-3" height="180">
+                <div class="card-body"></div>
+                {% if produto.discount > 0 %}
+                <h5 style="text-shadow: 1px 1px 2px rgb(0, 0, 0) ; color: rgb(255, 255, 255); position:absolute; top:45%; left:26%; font-weight:600" class="text-center">Desconto: {{produto.discount}}%</h5>
+                {% endif %}
+                <h4 class="text-center">{{produto.name}}</h4>
+                <p class="text-center">Preço: R${{produto.price}}</p>
+                <div class="card-footer">
+                     
+                    <a href="{{url_for('pagina_unica', id= produto.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static; font-weight:600" class="btn btn-success btn-sm">Detalhes</a>
+                    <form action="{{url_for('AddCart')}}" method="POST">
+                      <input type="hidden" name="produto_id" value="{{produto.id}}">
+                      <button type="submit" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:absolute; margin-top: -31px; margin-left: 100px; font-weight:600" class="btn btn-primary btn-sm">Adicionar ao Carrinho</button> 
+                      <input type="hidden" name="quantity" id="" value="1" min="1" max="{{produto.stock}}" size="3">
+                      {% set colors = produto.colors.split(',') %}
+                      
+                       <select name="colors" id="colors" style="visibility: hidden;">
+                        {% for color in colors %}
+                        {% set col = color.split(':') %}
+                        <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                        {% endfor %}
+                       </select>                      
+                    </form>
+                  
+                </div>
+            </div>
+        </div>
+         {% endfor %}
+</div> 
+
+        
+    </div>
+</div>
+{% endblock content %} 

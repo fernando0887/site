@@ -1,0 +1,87 @@
+{% extends 'layout.html'%}
+{% block content %}
+
+
+<div class="d-flex; width: 100%" >
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #562fe4;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <img src="/static/images/logo.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/admin">Administrador</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Todos os Produtos</a>
+              </li>
+
+                <div class="nav-item dropdown">
+                  <div class="accordion-header nav-item" id="flush-headingTwo">
+                    <a class="nav-link active dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                      Marcas
+                    </a>
+                  </div>
+                  <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                    {% for marca in marcas %}
+                  <li><a class="card-body" style="background-color:rgb(255, 254, 254); color:rgb(0, 0, 0);font-size:18px;" href="{{url_for('get_marca', id= marca.id)}}">{{marca.name}}</a><li>
+                    {% endfor %}
+                  </div>
+                </div>
+              
+                <div class="nav-item dropdown">
+                  <div class="accordion-header nav-item" id="flush-headingThree">
+                    <a class="nav-link active dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                      Categorias
+                    </a>
+                  </div>
+                  <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                    {% for categoria in categorias %}
+                  <li><a class="accordion-body" href="{{url_for('get_categoria', id= categoria.id)}}">{{categoria.name}}</a></li>
+                    {% endfor %}
+                  </div>
+                </div>
+                
+
+              
+
+              {% if current_user.is_authenticated %}
+
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for('get_perfil')}}">{{current_user.name}}</a> 
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for('cliente_Logout')}}">Sair</a> 
+              </li>
+
+              {% else %}
+
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for('cadastrar_clientes')}}">Cadastre-se</a> 
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for('clienteLogin')}}">Login</a> 
+              </li>
+              {% endif %}
+
+              <li class="nav-item">
+                <a class="nav-link active" href="{{url_for('getCart')}}" tabindex="-1">Carrinho({{session['LojainCarrinho']|length}})</a> 
+              </li>
+            </ul>
+            <form class="d-flex" method="POST">
+              <input class="form-control me-2" type="text" placeholder="Pesquisar produtos" autofocus ="autofocus" name="search_string">
+              <input class="btn btn-success my-2 my-sm-0" type="submit" formaction="/search" value="Pesquisar">
+            </form>
+          </div>
+        </div>
+  </nav>
+</div>
+
+{% endblock content %}
