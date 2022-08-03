@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include '_messages.html'%}
+
+<div class="container mt-4">
+   
+    <div class="row">
+        <div class="col-md-12">
+        <table class="table table-sm">
+            <thead>
+
+                <th>Código</th>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Variante</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+                <th>Desconto</th>
+                <th>SubTotal</th>
+                
+            </thead>
+
+            <tbody>
+                {% for key, produto in session['LojainCarrinho'].items() %}
+                {% set discount = "%0.2f" | format((produto.discount/100) * produto.price|float) %}
+                {% set subtotal = produto.quantity|int * produto.price|float %}
+
+                {% set Total = produto.quantity|int * produto.price|float %}
+                <tr>
+
+                    <td>{{loop.index}}</td>
+                    <td><img src="{{url_for('static', filename= 'images/' + produto.image)}}" alt="{{produto.name}}", width="50px", height="50px"></td>
+                    <td>{{produto.name}}</td>
+
+                <form action="{{url_for('updateCarrinho', code=key)}}" method="POST">
+                    <td>
+                        {% set colors = produto.colors.split(',') %}
+                        <label for="colors">Variante:</label>
+                         <select name="colors" id="colors" class="mt-2">
+                             <option value="{{produto.colors}}">{{produto.colors}}</option>
+                          {% for color in colors %}
+                          {% set col = color.split(':') %}
+                          <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                          {% endfor %}
+                         </select>
+                        
+
+                    </td>
+                    
+
+                    <td><input type="number" name="quantity" min="1" max="20" value="{{produto.quantity}}" size="1"></td>
+                    <td>R${{"%0.2f"|format(produto.price)}}</td>
+                    
+                    {% if produto.discount > 0 %}
+                    <td>{{produto.discount}} % &nbsp; </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
+                    
+                    
+                    <td></td>
+                    <td><button type="submit" class="btn btn-sm btn-success">Atualizar</button></td>
+                </form>
+                    <td><a href="{{url_for('deleteitem', id= key)}}" class="btn btn-sm btn-danger">Deletar</a></td>
+                    
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td></td>
+                    <td colspan="6"><a href="{{url_for('pedido')}}" class="btn btn-success btn-sm float-left">Finalizar compra</a></td>
+                    <!--<td colspan="5">Imposto: &nbsp; R${{imposto}}</td>-->
+                    <td colspan="6">Valor a pagar: &nbsp; R${{"%0.2f"|format(valorpagar)}}</td>
+                    <td><a href="{{url_for('esvaziarcarrinho')}}" class="btn btn-danger btn-sm ">Esvaziar carrinho</a></td> 
+                </tr>
+                
+            </tbody>
+
+        </table>
+        <a href="{{url_for('home')}}" class="btn btn-warning btn-sm float-right">Voltar</a>
+    </div>
+    
+</div>
+</div>
+
+
+
+{% endblock content %}

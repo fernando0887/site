@@ -1,0 +1,339 @@
+{% extends 'layout.html' %} 
+
+{% block content %} 
+
+{% include 'navbar.html' %}
+  
+
+<head>
+  <style>
+  .cookieConsentContainer{z-index:999;width:350px;min-height:20px;box-sizing:border-box;padding:30px 30px 30px 30px;background:#232323;overflow:hidden;position:fixed;bottom:30px;right:30px;display:none}.cookieConsentContainer .cookieTitle a{font-family:OpenSans,arial,sans-serif;color:#fff;font-size:22px;line-height:20px;display:block}.cookieConsentContainer .cookieDesc p{margin:0;padding:0;font-family:OpenSans,arial,sans-serif;color:#fff;font-size:13px;line-height:20px;display:block;margin-top:10px}.cookieConsentContainer .cookieDesc a{font-family:OpenSans,arial,sans-serif;color:#fff;text-decoration:underline}.cookieConsentContainer .cookieButton a{display:inline-block;font-family:OpenSans,arial,sans-serif;color:#fff;font-size:14px;font-weight:700;margin-top:14px;background:#000;box-sizing:border-box;padding:15px 24px;text-align:center;transition:background .3s}.cookieConsentContainer .cookieButton a:hover{cursor:pointer;background:#3e9b67}@media (max-width:980px){.cookieConsentContainer{bottom:0!important;left:0!important;width:100%!important}}
+  </style>
+</head>
+
+<script>
+var purecookieTitle="Cookies.",purecookieDesc="Ao usar esse site, você automaticamente concorda com a nossa política de privacidade!",purecookieLink='<a href="https://www.cssscript.com/privacy-policy/" target="_blank"></a>',purecookieButton="Entendido";function pureFadeIn(e,o){var i=document.getElementById(e);i.style.opacity=0,i.style.display=o||"block",function e(){var o=parseFloat(i.style.opacity);(o+=.02)>1||(i.style.opacity=o,requestAnimationFrame(e))}()}function pureFadeOut(e){var o=document.getElementById(e);o.style.opacity=1,function e(){(o.style.opacity-=.02)<0?o.style.display="none":requestAnimationFrame(e)}()}function setCookie(e,o,i){var t="";if(i){var n=new Date;n.setTime(n.getTime()+24*i*60*60*1e3),t="; expires="+n.toUTCString()}document.cookie=e+"="+(o||"")+t+"; path=/"}function getCookie(e){for(var o=e+"=",i=document.cookie.split(";"),t=0;t<i.length;t++){for(var n=i[t];" "==n.charAt(0);)n=n.substring(1,n.length);if(0==n.indexOf(o))return n.substring(o.length,n.length)}return null}function eraseCookie(e){document.cookie=e+"=; Max-Age=-99999999;"}function cookieConsent(){getCookie("purecookieDismiss")||(document.body.innerHTML+='<div class="cookieConsentContainer" id="cookieConsentContainer"><div class="cookieTitle"><a>'+purecookieTitle+'</a></div><div class="cookieDesc"><p>'+purecookieDesc+" "+purecookieLink+'</p></div><div class="cookieButton"><a onClick="purecookieDismiss();">'+purecookieButton+"</a></div></div>",pureFadeIn("cookieConsentContainer"))}function purecookieDismiss(){setCookie("purecookieDismiss","1",7),pureFadeOut("cookieConsentContainer")}window.onload=function(){cookieConsent()};
+</script>
+
+<div class="container-fluid" style="background-color: rgb(92, 163, 245);">
+  <div class="row">
+          {% if marca %} 
+          {% for m in marca.items %}
+        <div class="col-md-3">
+            <div class="card">
+                  <img src="{{url_for('static', filename='images/' + m.image_1)}}" alt="{{m.name}}" class="card-img-top mt-3" height="180">
+                  <div class="card-body"></div>
+                  {% if m.discount > 0 %}
+                  <h5 style="text-shadow: 1px 1px 2px rgb(13, 13, 15) ; color: rgb(255, 255, 255); position:absolute; top:45%; left:26%; font-weight:600" class="text-center">Desconto: {{m.discount}}%</h5>
+                  {% endif %}
+                  <h4 class="text-center">{{m.name}}</h4>
+                  <p class="text-center">Preço: R${{m.price}}</p>
+                      <div class="card-footer">
+                        <a href="{{url_for('pagina_unica', id= m.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static;  font-weight:600" align="center" class="btn btn-success btn-sm">Detalhes</a>
+                        <a href="{{url_for('pagina_unica', id= m.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static; top:90%; left:50%; font-weight:600" class="btn btn-primary btn-sm">Carrinho</a>
+
+                      </div>
+            </div>
+            {% endfor %}
+        </div>
+          
+  </div>      
+
+
+  <div class="row">
+    <div class="col text-center">
+      {% if marca.has_prev %}
+      {% if marca.total < 0 %}
+      <b><b><b><a href="{{url_for('get_marca', id= get_m.id, pagina= get_cat_prod.prev_num)}}"  class="btn btn-outline btn-md mt-2" style="font-weight:1000px ;">Página anterior</a></b></b></b>
+      {% endif %}  
+
+      {% for page_num in marca.iter_pages(left_edge= 1, right_edge= 2, left_current= 1, right_current= 2 ) %}
+      {% if page_num %}
+
+      {% if marca.paginas == page_num %}
+      <a href="{{url_for('get_marca', id= get_m.id, pagina=page_num)}}"  class="btn btn-sucess btn-md " style="font-weight:1000px ;">{{page_num}}</a>
+      {% else %}
+      <a href="{{url_for('get_marca', id= get_m.id, pagina=page_num)}}"  class="btn btn-md" style="font-weight:1000px ;">{{page_num}}</a>
+      {% endif %}
+      {% else %} 
+      ...
+      {% endif %} 
+
+      {% endfor %}
+      {% endif %} 
+      {% if marca.has_next %}
+      <b><b><b><a href="{{url_for('get_marca', id= get_m.id, pagina= get_cat_prod.next_num)}}"  class="btn btn-outline btn-md mt-1" style="font-weight:1000px ;">Próxima página</a></b></b></b>
+      {% endif %}  
+
+    </div>
+     
+  </div>   
+
+
+  <div class="row">
+          {% elif get_cat_prod %}
+          {% for get_cat in get_cat_prod.items %}
+            
+            <div class="col-md-3">
+              <div class="card">
+                  <img src="{{url_for('static', filename='images/' + get_cat.image_1)}}" alt="{{get_cat.name}}" class="card-img-top mt-3" height="180">
+                  <div class="card-body"></div>
+                  {% if get_cat.discount > 0 %}
+                  <h5 style="text-shadow: 1px 1px 2px rgb(13, 13, 15) ; color: rgb(255, 254, 254); position:absolute; top:45%; left:26%; font-weight:600" class="text-center">Desconto: {{get_cat.discount}}%</h5>
+                  {% endif %}
+                  <h4 class="text-center">{{get_cat.name}}</h4>
+                  <p class="text-center">Preço: R${{get_cat.price}}</p>
+                      <div class="card-footer">
+                        <a href="{{url_for('pagina_unica', id= get_cat.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static;  font-weight:600" class="btn btn-success btn-sm">Detalhes</a>
+                        <a href="{{url_for('pagina_unica', id= get_cat.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static; top:90%; left:50%; font-weight:600" class="btn btn-primary btn-sm">Carrinho</a>
+
+                      </div>
+                </div>
+            </div>
+         {% endfor %}
+        
+  </div>
+
+  <div class="row">
+          <div class="col text-center">
+           {% if get_cat_prod.has_prev %}
+           
+           <b><b><b><a href="{{url_for('get_categoria', id= get_cat.id, pagina= get_cat_prod.prev_num)}}"  class="btn btn-outline btn-md mt-3" style="font-weight:1000px ;">Página anterior</a></b></b></b>
+           {% endif %}  
+           {% if get_cat_prod.total < 0 %}
+           {% for page_num in get_cat_prod.iter_pages(left_edge= 1, right_edge= 2, left_current= 1, right_current= 2) %}
+           {% if page_num %}
+ 
+           {% if get_cat_prod.paginas == page_num %}
+           <a href="{{url_for('get_categoria', id= get_cat.id, pagina=page_num)}}"  class="btn btn-sucess btn-md mt-3" style="font-weight:1000px ;">{{page_num}}</a>
+           {% else %}
+           <a href="{{url_for('get_categoria', id= get_cat.id, pagina=page_num)}}"  class="btn btn-md mt-3" style="font-weight:1000px ;">{{page_num}}</a>
+           {% endif %}
+           {% else %} 
+           ...
+           {% endif %} 
+ 
+           {% endfor %}
+           {% endif %}
+           {% if get_cat_prod.has_next %}
+           <b><b><b><a href="{{url_for('get_categoria', id= get_cat.id, pagina= get_cat_prod.next_num)}}"  class="btn btn-outline btn-md mt-3" style="font-weight:1000px ;">Próxima página</a></b></b></b>
+           {% endif %}  
+ 
+          </div>
+          
+  </div>    
+
+
+  <div class="row">
+  
+        {% else %}
+
+        {% for produto in produtos.items %}
+    <div class="col-md-3">
+          <div class="card mt-3">
+                <img src="{{url_for('static', filename='images/' + produto.image_1)}}" alt="{{produto.name}}" class="card-img-top mt-3" height="180">
+                <div class="card-body"></div>
+                {% if produto.discount > 0 %}
+                <h5 style="text-shadow: 1px 1px 2px rgb(0, 0, 0) ; color: rgb(255, 255, 255); position:absolute; top:45%; left:26%; font-weight:600" class="text-center">Desconto: {{produto.discount}}%</h5>
+                {% endif %}
+                <h4 class="text-center">{{produto.name}}</h4>
+                <p class="text-center">Preço: R${{produto.price}}</p>
+                <div class="card-footer">
+                     
+                    <a href="{{url_for('pagina_unica', id= produto.id)}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static; font-weight:600" class="btn btn-success btn-sm">Detalhes</a>
+                    <form action="{{url_for('AddCart')}}" method="POST">
+                      <input type="hidden" name="produto_id" value="{{produto.id}}">
+                      <button type="submit" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:absolute; margin-top: -31px; margin-left: 100px; font-weight:600" class="btn btn-primary btn-sm">Carrinho</button> 
+                      <input type="hidden" name="quantity" id="" value="1" min="1" max="{{produto.stock}}" size="3">
+                      {% set colors = produto.colors.split(',') %}
+                      
+                       <select name="colors" id="colors" style="visibility: hidden;">
+                        {% for color in colors %}
+                        {% set col = color.split(':') %}
+                        <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+                        {% endfor %}
+                       </select>                      
+                    </form>
+                  
+                </div>
+          </div>
+    </div>
+         {% endfor %}
+              
+  </div>
+
+
+  <div class="row">
+        <div class="col text-center">
+          {% if produtos.has_prev %}
+         <b><b><b><a href="{{url_for('home', pagina= produtos.prev_num)}}"  class="btn btn-outline btn-md mt-3" style="font-weight:1000px ;">Página anterior</a></b></b></b>
+          {% endif %}  
+          {% if produtos.total < 0 %}
+          {% for page_num in produtos.iter_pages(left_edge= 1, right_edge= 2, left_current= 1, right_current= 2) %}
+          {% if page_num %}
+
+          {% if produtos.paginas == page_num %}
+          <a href="{{url_for('home', pagina=page_num)}}"  class="btn btn-sucess btn-md mt-3" style="font-weight:1000px ;">{{page_num}}</a>
+          {% else %}
+          <a href="{{url_for('home', pagina=page_num)}}"  class="btn btn-md mt-3" style="font-weight:1000px ;">{{page_num}}</a>
+          {% endif %}
+          {% else %} 
+          ...
+          {% endif %} 
+
+          {% endfor %}
+          {% endif %} 
+          {% if produtos.has_next %}
+          <b><b><b><a href="{{url_for('home', pagina= produtos.next_num)}}"  class="btn btn-outline btn-md mt-3" style="font-weight:1000px ;">Próxima página</a></b></b></b>
+          {% endif %}  
+
+        </div>
+        {% endif %} 
+            
+  </div>         
+          
+  <br>
+  <br>
+  <br> 
+  <br>
+  <br>
+  <br>
+  <br> 
+  <br>    
+</div>
+
+<div class="footer">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+         <a href="https://web.whatsapp.com/send?phone=5547997612036?text=faleconosco" style="position:fixed;width:60px;height:60px;bottom:100px;right:30px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;font-size:30px;box-shadow: 1px 1px 2px #888;
+          z-index:1000;" target="_blank">
+         <i style="margin-top:16px" class="fa fa-whatsapp"></i>
+         </a>
+</div>
+
+<!-- Remove the container if you want to extend the Footer to full width. -->
+<div>
+
+  <!-- Footer -->
+  <footer
+          class="text-center text-lg-start text-white"
+          style="background-color: #1c2331"
+          >
+    <!-- Section: Social media -->
+    <section
+             class="d-flex justify-content-between p-4"
+             style="background-color: #6351ce"
+             >
+      <!-- Left -->
+      <div class="me-5">
+        <span>Siga nossas redes sociais:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="https://www.facebook.com/DATASCIENCEFKS" class="text-white me-4">
+          <i class="fa fa-facebook-f"></i>
+        </a>
+        <a href="https://www.instagram.com/data_science_fks/" class="text-white me-4">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a href="https://www.instagram.com/data_science_fks/" class="text-white me-4">
+          <i class="fa fa-google"></i>
+        </a>
+        <a href="https://www.instagram.com/data_science_fks/" class="text-white me-4">
+          <i class="fa fa-instagram"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/fernando-schmitt-976489117/" class="text-white me-4">
+          <i class="fa fa-linkedin"></i>
+        </a>
+        <a href="https://github.com/fernando0887" class="text-white me-4">
+          <i class="fa fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold">Ds Fk's</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              Ds Fk's desenvolvimento de software e ciência de dados pra você!
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Produtos</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              <a href="#!" class="text-white">Ciência de dados</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Sites</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Landing pages</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white"></a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Contato</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p><i class="fa fa-home mr-3"></i>Ds Fk's</p>
+            <p><i class="fa fa-envelope mr-3"></i> nando_fks@outlook.com</p>
+            <p><i class="fa fa-phone mr-3"></i>55(47)997612036</p>
+            <!--<i class="fa fa-print mr-3"></i></p>-->
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      © 2022 Copyright:
+      <a class="text-white" href=""
+         >Ds Fk's</a
+        >
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+</div>
+<!-- End of .container -->
+
+
+   
+{% endblock content %} 

@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% include '_messages.html'%}
+
+<div class="container"><nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/admin">Painel Administrador</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/admin">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/marcas">Fabricantes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categoria">Categorias</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Outras opções
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="/addmarca">Adicionar Fabricante</a></li>
+              <li><a class="dropdown-item" href="/addcat">Adicionar Categoria</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/addproduto">Adicionar Produto</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+           <!-- <a class="nav-link disabled">Disabled</a> -->
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+            <div class="col-md-6">
+            {% include '_messages.html' %}
+            {% if updatecategoria %}
+            <h2 class="text-center mt-5">Atualizar Categoria</h2>
+            <form action="" method="POST">
+                <input type="text" name="categoria" class="form-control" value="{{updatecategoria}}">
+                <input type="submit" value="Atualizar categoria" class="btn btn-primary mt-2">
+
+
+            </form>
+            {% else %}
+            <h2 class="text-center mt-5">Cadastrar Categoria</h2>
+            <form action="" method="POST">
+                <input type="text" name="categoria" class="form-control">
+                <input type="submit" value="Update categoria" class="btn btn-primary mt-2">
+
+
+            </form>
+            {% endif %}
+            <a class="btn btn-danger" style="margin-top: -68px; margin-left: 180px;" href="/categoria">Cancelar</a>
+        </div>     
+        <div class="col-md-3">   
+        
+    </div>
+</div>
+
+{% endblock content %}

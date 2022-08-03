@@ -1,0 +1,208 @@
+{% extends 'layout.html' %} 
+{% include 'navbar.html' %}
+
+{% block content %} 
+
+
+
+
+<div class="container mt-3">
+    <div class="box">
+      <div class="col-md-6 mt-2" id="m_image">
+        <img src="{{url_for('static', filename='images/' + produto.image_1)}}" alt="{{produto.name}}"  height="400" width="400">  
+      </div>
+      <div class="col-md-6 mt-2" id="s_image">
+        <img src="{{url_for('static', filename='images/' + produto.image_1)}}" alt="{{produto.name}}"  width="80" height="80" class="p-1">
+        <img src="{{url_for('static', filename='images/' + produto.image_2)}}" alt="{{produto.name}}"  width="80" height="80" class="p-1">
+        <img src="{{url_for('static', filename='images/' + produto.image_3)}}" alt="{{produto.name}}"  width="80" height="80" class="p-1"> 
+      </div>
+
+        
+    
+        <div class="col-md-6">
+            <h3>Nome do produto: {{produto.name}}</h3>
+            <br>
+            <h4>Preço: R${{produto.price}}</h4>
+            <p>Quantidade disponível: {{produto.stock}}</p>
+            {% if produto.discount > 0 %}
+            <b class="text-center">Desconto:{{produto.discount}}%</b>
+            {% endif %}
+            <hr>
+            <b>Descrição do produto</b> 
+            <p>{{produto.desc}}</p>
+            <hr>
+        
+    
+    
+            <form  action="{{url_for('AddCart')}}" method="POST">
+             <input type="hidden" name="produto_id" value="{{produto.id}}">
+             <label for="">Quantidade:</label>
+             <input type="number"  name="quantity" id="" value="1" min="1" max="{{produto.stock}}" size="3">
+             {% set colors = produto.colors.split(',') %}
+             <label for="colors">Variante:</label>
+              <select name="colors" id="" class="mt-2">
+               {% for color in colors %}
+               {% set col = color.split(':') %}
+               <option value="{{col[0]}}">{{col[0]|capitalize}}</option>
+               {% endfor %}
+              </select>
+             <hr> 
+             <button type="submit" name="produto_id" value="{{produto.id}}" style="text-shadow: 1px 1px 2px rgb(5, 5, 5) ; color: rgb(255, 255, 255); position:static; top:90%; left:50%; font-weight:600" class="btn btn-primary btn-md">Adicionar ao Carrinho</button> 
+        
+              
+           
+            </form>
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Remove the container if you want to extend the Footer to full width. -->
+<div>
+
+  <!-- Footer -->
+  <footer
+          class="text-center text-lg-start text-white"
+          style="background-color: #1c2331"
+          >
+    <!-- Section: Social media -->
+    <section
+             class="d-flex justify-content-between p-4"
+             style="background-color: #6351ce"
+             >
+      <!-- Left -->
+      <div class="me-5">
+        <span>Siga nossas redes sociais:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-facebook-f"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-google"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-instagram"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-linkedin"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fa fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold">Ds Fk's</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              Ds Fk's desenvolvimento de software e ciência de dados pra você!
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Produtos</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              <a href="#!" class="text-white">Ciência de dados</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Sites</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Landing pages</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white"></a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Contato</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p><i class="fa fa-home mr-3"></i>Ds Fk's</p>
+            <p><i class="fa fa-envelope mr-3"></i> nando_fks@outlook.com</p>
+            <p><i class="fa fa-phone mr-3"></i>(47)997612036</p>
+            <!--<i class="fa fa-print mr-3"></i></p>-->
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      © 2022 Copyright:
+      <a class="text-white" href=""
+         >Ds Fk's</a
+        >
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+</div>
+<!-- End of .container -->
+
+<!-- mudar imagem-->
+<script> 
+  var m_image = document.getElementById('m_image');
+  var s_image = document.getElementById('s_image').getElementsByTagName('img');
+
+  for(var i = 0; i < s_image.length; i++){
+    s_image[i].addEventListener('click', full_image);
+  }
+
+  function full_image(){
+    var ImageSRC = this.getAttribute('src');
+    m_image.innerHTML = "<img src =" + ImageSRC + " width='400' height='400'>";
+  }
+</script>
+
+
+
+
+
+
+
+
+
+{% endblock content %} 
