@@ -1,0 +1,28 @@
+{% extends "layout.html" %} 
+
+{% block content %} 
+
+<div class="container">
+  <div class="text-center text h1"> Registrar Administrador </div><b></b>
+  {% from "_formsajuda.html" import render_field %}
+<form method="post" >
+      {{form.csrf_token}}
+  <div>
+    {{ render_field(form.name, class="form-control") }}
+    {{ render_field(form.username, class="form-control") }}
+    {{ render_field(form.email, class="form-control") }}
+    {{ render_field(form.password, class="form-control") }}
+    {{ render_field(form.confirm, class="form-control") }}
+    
+    <input type="file" name="photo">
+  </div>
+
+  <p></p><input type="submit" value="Registrar" class="btn btn-success"><p></p>
+
+</form>
+
+
+</div>
+
+
+{% endblock content %} 
