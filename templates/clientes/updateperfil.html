@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% include '_messages.html' %}
+
+{% include 'navbar.html' %}
+
+<div class="container">
+    <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h2 class="text-center bg p-2">Atualizar Perfil</h2>
+        {% from '_formsajuda.html' import render_field %}
+        <form action="" method="POST" enctype="multipart/form-data">
+
+            {{ render_field(form.name, class="form-control", placeholder= 'Nome') }}
+            {{ render_field(form.username, class="form-control", placeholder= 'Usúario') }}
+            {{ render_field(form.email, class="form-control", placeholder= 'Email') }}
+            {{ render_field(form.contact, class="form-control", placeholder= 'Telefone com DDD') }}
+            {{ render_field(form.address, class="form-control", placeholder= 'Endereço') }}
+            {{ render_field(form.district, class="form-control", placeholder= 'Bairro') }}
+            {{ render_field(form.zipcode, class="form-control", placeholder= 'CEP') }}
+            {{ render_field(form.state, class="form-control", placeholder= 'Estado') }}
+            {{ render_field(form.country, class="form-control", placeholder= 'País') }}
+
+            <div class="container">
+                <div class="row">
+                    <div class="clo-md-4">{{ render_field(form.profile, class="form-control") }}</div>
+                    
+                </div>
+            </div>
+            <button type="submit" class="btn bg-primary btn-success mt-4 mb-5">Atualizar Perfil</button>
+    
+    
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends 'layout.html'%}
+{% block content %}
+
+<div class="container mt-4">
+    
+    <div class="row">
+        <div class="col-md-12">
+            <b style="float:right;">Número do pedido: {{pedidos.notafiscal}}</b> 
+            <br>
+            <b>Status do pedido: {{pedidos.status}}</b>
+            <br>
+            <b>Nome do cliente: {{cliente.name}}</b>
+            <br>
+            <b>Email do cliente: {{cliente.email}}</b>
+            <br>
+            <b>Telefone do cliente: {{cliente.contact}}</b>
+            <br>
+            <br>
+
+            <table class="table table-sm">
+                <thead>
+
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Variante</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>Desconto</th>
+                    <th>SubTotal</th>
+                    
+                </thead>
+
+                <tbody>
+                    {% for key, produto in pedidos.pedido.items() %}
+                    {% set discount = "%0.2f" | format((produto.discount/100) * produto.price|float) %}
+                    {% set subtotal = produto.quantity|int * produto.price|float %}
+                    <tr>
+
+                        <td>{{loop.index}}</td>
+                        <td>{{produto.name}}</td>
+
+                    <form action="{{url_for('updateCarrinho', code=key)}}" method="post">
+                        <td>
+                        {{produto.color}}   
+                        </td>
+                        <td>R${{"%0.2f"|format(produto.price)}}</td>
+                        <td>{{produto.quantity}}</td>
+                        {% if produto.discount > 0 %}
+                        <td>{{produto.discount}} % &nbsp; </td>
+                        {% else %}
+                        <td></td>
+                        {% endif %}
+                        
+                        <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
+                        
+                        
+                        <td></td>
+                        
+                    </form>
+                        
+                        
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td></td>
+                        <!--pagamento com stripe-->
+                        {% if pedidos.status == 'Pago' %}
+                        {% else %}
+                        <form action="{{url_for('pagamento')}}" method="post">
+                            {% set amount = gtotal|replace('.','0') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{pedidos.notafiscal}}">
+                            <script
+                            src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="pk_test_51LQGJ5DhrUXYkCCGPdzauNxK8u49CEBbr7B4ImgvNtiWPI10DWIgSyxzzs3O8luxfPYsbGgG5qF26IexMjtbbDF700JqeI5d29"
+                        
+                            data-name="Fks shop"
+                            data-description="Pagamento"
+                            data-amount="{{amount}}"
+                            data-currency="brl">
+                            </script>
+                        </form>
+                        {% endif %}
+                    
+                        <td colspan="6">Valor a pagar: &nbsp; R${{"%0.02f"|format(gtotal|float)}}</td>
+                        <td>
+                            <form action="{{url_for('get_pdf', notafiscal= pedidos.notafiscal)}}" method="post">
+                            <button type="submit" class="btn btn-warning btn-sm float-left">Gerar PDF</button>
+                            </form>
+
+                            
+                        </td> 
+                    </tr>
+                </tbody>
+
+            </table>
+            <a href="{{url_for('home')}}" class="btn btn-outline-success btn-md">Voltar</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
